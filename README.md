@@ -10,6 +10,12 @@ The client is written in Java.
 - working with multiple threads, and so is fluent
 - Realized with no third-party API except JIntellitype
 
+## Demo
+- have vulnerabilities in server. exploit code is put in client/bin
+- add statusLabel in client
+- client can identify status items
+
 ## To Do List
 - realized download function
 - show more file information
+- enhance security
