@@ -15,18 +15,35 @@ public class Item {
 	 * path getter
 	 * @return
 	 */
-	String getPath() {return path;}
+	public String getPath() { return path; }
+	public String getText() { return path; } 
 	
 	/**
 	 * check pathName
 	 * @param s
-	 * @return whether s is path
+	 * @return whether item is a PathItem
 	 */
-	public static boolean isItemPath(final String s) {
-		return s.startsWith("/");
+	public boolean isPathItem() {
+		return this.path.startsWith("/");
 	}
 	
-	public static boolean isEndMarkItem(final Item item) {
-		return item.path.startsWith("#");
+	/**
+	 * check endmark
+	 * @return whether item is a EndMarkItem
+	 */
+	public boolean isEndMarkItem() {
+		return this.path.equals("#");
+	}
+	
+	/**
+	 * check statusItem
+	 * @return whether item is a StatusItem
+	 */
+	public boolean isStatusItem() {
+		return this.path.startsWith("#") && this.path.length() > 1;
+	}
+	
+	public String getStatusText() {
+		return this.path.substring(1);
 	}
 }

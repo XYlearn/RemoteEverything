@@ -2,10 +2,8 @@ package com;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Image;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -65,7 +63,7 @@ public class ItemRender extends JPanel implements ListCellRenderer<Item> {
 
 		Font fileNameFont = new Font("黑体", Font.BOLD, 22);
 		fileNameLabel.setFont(fileNameFont);
-		Font filePathFont = new Font("华文行楷", Font.ITALIC, 15);
+		Font filePathFont = new Font("微软雅黑", Font.ITALIC, 15);
 		filePathLabel.setFont(filePathFont);
 
 		textPane.add(fileNameLabel);

@@ -8,10 +8,10 @@ TARGET=everything
 BIN_TARGET=${BIN_DIR}/${TARGET}
 
 CC := gcc
-CFLAGS := -g
+CFLAGS := -g -m32 -fno-stack-protector
 
 ${BIN_TARGET}:${OBJ}
-	${CC} ${OBJ} -o $@
+	${CC} ${OBJ} -o $@ -m32 -no-pie -fno-stack-protector
 
 ${OBJ_DIR}/%.o:${SRC_DIR}/%.c
 	${CC} ${CFLAGS} -c $< -o $@

@@ -4,21 +4,13 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 public class ItemGetter implements Runnable {
-
-	private static final String DEFAULT_HOST = "192.168.199.158";
-	private static final int DEFAULT_PORT = 15536;
 
 	private DataOutputStream out;
 	private BufferedReader in;
@@ -89,6 +81,9 @@ public class ItemGetter implements Runnable {
 			
 			// send a cmd and receive contents returned
 			try {
+				if(cmd.length() < 2) {
+					System.out.println("[-]Too short!");
+				}
 				byte[] cmdBytes = cmd.getBytes("utf-8");
 				out.write(cmdBytes);
 				out.writeByte('\n');
@@ -96,15 +91,14 @@ public class ItemGetter implements Runnable {
 				Item item = null;
 				String path = null;
 				while ((path = in.readLine()) != null) {
-					if (Item.isItemPath(path)) {
-						item = new Item(path);
+					item = new Item(path);
+					if (item.isPathItem()) {
 						itemQueue.put(item);
-					} else if (path.startsWith("#")) {
-						item = new Item(path);
+					} else if (item.isEndMarkItem()) {
 						itemQueue.put(item);
 						break;
-					} else {
-						System.out.println(path);
+					} else if (item.isStatusItem()){
+						itemQueue.put(item);
 					}
 				}
 			} catch (IOException e) {

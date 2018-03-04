@@ -11,8 +11,7 @@ import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
 
 public class EverythingGUI extends JFrame {
-	private static final int DEFAULT_WIDTH = 600;
-	private static final int DEFAULT_HEIGHT = 70;
+	
 	private static Font defaultFont;
 
 	private static final int SWITCH_KEY_MARK = 100;
@@ -55,7 +54,7 @@ public class EverythingGUI extends JFrame {
 		this.itemLister = null;
 
 		// set frame
-		this.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		this.setSize(EverythingConfig.INPUTER_DEFAULT_WIDTH, EverythingConfig.INPUTER_DEFAULT_HEIGHT);
 		this.setLocationRelativeTo(null);
 		this.setBackground(Color.RED);
 		this.setUndecorated(true);
@@ -76,12 +75,11 @@ public class EverythingGUI extends JFrame {
 		textField.setToolTipText("输入要搜索的文件名");
 		textField.setFont(defaultFont);
 		
-		// keylistener
+		// key listener
 		textField.addKeyListener(new KeyListener() {
-			private int prevLength = 0;
-
 			@Override
 			public void keyPressed(KeyEvent e) {
+				// Enter Pressed : sendCmd and getList
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String currentText = textField.getText();
 					if (!currentText.isEmpty()) {
@@ -161,8 +159,8 @@ public class EverythingGUI extends JFrame {
 	 *            new itemLister to set
 	 */
 	public void setItemLister(ItemLister itemLister) {
-		if (this.itemLister != null)
-			this.itemLister.dispose();
+		if(itemLister == this.itemLister)
+			return;
 		this.itemLister = itemLister;
 	}
 

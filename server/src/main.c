@@ -7,7 +7,7 @@
 #include "item.h"
 #include "itemlist.h"
 
-#define MAX_ITEMS 200
+#define MAX_ITEMS 2000
 
 /**
  * exec locate to print filepaths containing part_name
@@ -48,20 +48,28 @@ int main(int argc, char *argv[])
     {
         char buf[4096];
         fgets(buf, sizeof(buf), stdin);
+        /* commands are started with # */
         if(buf[0] == '#')
         {
+            /* exit command
             if(StartWith(buf, "#exit"))
                 break;
-            else if(StartWith(buf, "#prev"))
+            */
+
+            /* print previous results*/
+            if(StartWith(buf, "#prev"))
                 ItemListForEach(list, PrintItem);
+            /* print welcome */
             else if(StartWith(buf, "#msc"))
-                Printf("Welcom to MSC!\n");
+                Printf("#Welcom to MSC!\n");
             else    
                 FreeItemList(list);
         }
+        /* locate cmd */
         else
         {
             list = Locate(buf, MAX_ITEMS);
+            /* sort according to access time */
             SortItemList(list);
             ItemListForEach(list, PrintItem);
             Printf("#\n");
@@ -74,7 +82,9 @@ int main(int argc, char *argv[])
 ItemList Locate(char *part_name, int max_item)
 {
     char buf[4096];
-    strcpy(buf, "locate -i ");
+    
+    sprintf(buf, "locate --ignore-case --limit %d ", max_item);
+    // vulnerable
     strcat(buf, part_name);
     FILE *pipe = popen(buf, "r");
     if(pipe == NULL)
@@ -84,16 +94,13 @@ ItemList Locate(char *part_name, int max_item)
     }
 
     ItemList list = NewItemList();
-    int item_num = 0;
     // get items(less than max_item)
-    while(fgets(buf, sizeof(buf), pipe) && item_num < max_item)
+    while(fgets(buf, sizeof(buf), pipe))
     {
-        int path_length = strlen(buf) - 1;
-        buf[path_length] = '\0';
+        buf[strlen(buf) - 1] = '\0';
         if(!Filt(buf))
             continue;
         AddItem(list, buf);
-        item_num++;
         buf[0] = '\0';
     }
     pclose(pipe);
